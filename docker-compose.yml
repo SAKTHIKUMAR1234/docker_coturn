@@ -3,9 +3,24 @@ version: "3.8"
 services:
   coturn:
     image: coturn/coturn:latest
-    container_name: turn-server
-    restart: unless-stopped
+    container_name: coturn
     network_mode: host
+    restart: unless-stopped
+
+    environment:
+      TURN_PORT: ${TURN_PORT}
+      RELAY_IP: ${RELAY_IP}
+      EXTERNAL_IP: ${EXTERNAL_IP}
+      TURN_REALM: ${TURN_REALM}
+      TURN_USER: ${TURN_USER}
+      TURN_PASSWORD: ${TURN_PASSWORD}
+
     volumes:
-      - ./turnserver.conf:/etc/coturn/turnserver.conf
-    command: ["turnserver", "-c", "/etc/coturn/turnserver.conf", "--no-cli"]
+      - ./turnserver.conf.template:/etc/coturn/turnserver.conf.template
+
+    command: >
+      sh -c "
+      envsubst < /etc/coturn/turnserver.conf.template
+      > /etc/coturn/turnserver.conf
+      && turnserver -c /etc/coturn/turnserver.conf --no-cli
+      "

@@ -1,0 +1,14 @@
+listening-port=${TURN_PORT}
+
+listening-ip=0.0.0.0
+relay-ip=${RELAY_IP}
+external-ip=${EXTERNAL_IP}
+
+lt-cred-mech
+realm=${TURN_REALM}
+user=${TURN_USER}:${TURN_PASSWORD}
+
+fingerprint
+
+log-file=stdout
+simple-log
